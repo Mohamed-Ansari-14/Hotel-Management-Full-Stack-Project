@@ -1,0 +1,71 @@
+<div class="center-form">
+    <h1 class="page-title">Reservations</h1>
+
+    <nz-table #basicTable [nzShowPagination]="'false'" [nzData]="reservations">
+        <thead>
+            <tr>
+                <th>Room Name</th>
+                <th>Room Type</th>
+                <th>Check In Date</th>
+                <th>Check Out Date</th>
+                <th>Price</th>
+                <th>Username</th>
+                <th>Status</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            <tr *ngFor="let reservation of basicTable.data">
+                <td>{{ reservation.roomName }}</td>
+                <td>{{ reservation.roomType }}</td>
+                <td>{{ reservation.checkInDate }}</td>
+                <td>{{ reservation.checkOutDate }}</td>
+                <td>{{ reservation.price }}</td>
+                <td>{{ reservation.username }}</td>
+                <td>
+                    <ng-container *ngIf="reservation.reservationStatus === 'PENDING'">
+                        <nz-tag nzColor="processing">
+                            <span nz-icon nzType="sync" nzSpin></span>
+                            <span>Pending</span>
+                        </nz-tag>
+                    </ng-container>
+
+                    <ng-container *ngIf="reservation.reservationStatus === 'APPROVED'">
+                        <nz-tag nzColor="success">
+                            <span nz-icon nzType="check-circle"></span>
+                            <span>Approved</span>
+                        </nz-tag>
+                    </ng-container>
+
+                    <ng-container *ngIf="reservation.reservationStatus === 'REJECTED'">
+                        <nz-tag nzColor="error">
+                            <span nz-icon nzType="close-circle" nzSpin></span>
+                            <span>Rejected</span>
+                        </nz-tag>
+                    </ng-container>
+                </td>
+
+                <td>
+                    <span *ngIf="reservation.reservationStatus == 'PENDING'">
+                        <span nz-icon [nzType]="'check-circle'" [nzTheme]="'twotone'"
+                            [nzTwotoneColor]="'#52c41a'" class="icon" 
+                            (click)="changeReservationStatus(reservation.id, 'Approve')">
+                        </span>
+
+                        <span nz-icon [nzType]="'close-circle'" [nzTheme]="'twotone'"
+                            [nzTwotoneColor]="'#FF0000'" class="icon" 
+                            (click)="changeReservationStatus(reservation.id, 'Reject')">
+                        </span>
+                    </span>
+                </td>
+            </tr>
+        </tbody>
+    </nz-table>
+
+    <div class="pagination">
+        <nz-pagination (nzPageIndexChange)="pageIndexChange($event)" 
+            [nzPageIndex]="currentPage" [nzTotal]="total" [nzPageSize]="5"></nz-pagination>
+    </div>
+
+</div>
